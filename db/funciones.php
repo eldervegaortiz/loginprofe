@@ -2,7 +2,7 @@
 
 function obtener_usuarios(){
     try{
-        require "conexion.php";
+        require __DIR__ . "/conexion.php";
         $sql = "SELECT * FROM usuario";
         $query = mysqli_query($conex, $sql);
         return $query;
@@ -12,44 +12,46 @@ function obtener_usuarios(){
 }
 
 function create_user(){
-    require 'conexion.php';               
+    require __DIR__ . '/conexion.php';               
     $errores = [];
 
     if (isset($_POST['agregar'])){
-        $nombre = $_POST['nombre'] ?? '';
-        $apellido = $_POST['apellido'] ?? '';
-        $cedula = $_POST['cedula'] ?? '';
-        $correo = $_POST['correo'] ?? '';
-        $telefono = $_POST['telefono'] ?? '';
+        $nombre = trim($_POST['nombre'] ?? '');
+        $apellido = trim($_POST['apellido'] ?? '');
+        $cedula = trim($_POST['cedula'] ?? '');
+        $correo = trim($_POST['correo'] ?? '');
+        $telefono = trim($_POST['telefono'] ?? '');
         $contraseña = $_POST['contraseña'] ?? '';
         $confcontraseña = $_POST['confcontraseña'] ?? '';
 
-        if (!$cedula) $errores[] = "Ingrese el número de cédula"; 
-        if (!$nombre) $errores[] = "Ingrese un nombre"; 
-        if (!$apellido) $errores[] = "Ingrese el apellido"; 
-        if (!$correo) $errores[] = "Ingrese el correo"; 
-        if (!$telefono) $errores[] = "Ingrese el número de teléfono"; 
-        if (!$contraseña) $errores[] = "Ingrese la contraseña"; 
+        if (!$cedula) $errores[] = "ingrese el numero de cedula"; 
+        if (!$nombre) $errores[] = "ingrese un nombre"; 
+        if (!$apellido) $errores[] = "ingrese el apellido"; 
+        if (!$correo) $errores[] = "ingrese el correo"; 
+        if (!$telefono) $errores[] = "ingrese el numero de telefono"; 
+        if (!$contraseña) $errores[] = "ingrese la contraseña"; 
         
-        if ($contraseña !== $confcontraseña){
-            $errores[] = "Las contraseñas no coinciden"; 
+        if ($contraseña != $confcontraseña){
+            $errores[] = "las contraseñas no coinciden"; 
         } else {
-            $contraseña_hash = password_hash($contraseña, PASSWORD_BCRYPT);
+            $contraseña = password_hash($contraseña, PASSWORD_BCRYPT);
         }
 
-        $query = "SELECT * FROM usuario WHERE cedula = '$cedula'";
+        $query = "SELECT * FROM usuario WHERE cedula = '$cedula' OR correo = '$correo';";
         $resultado = mysqli_query($conex, $query);
         
         if($resultado && $resultado->num_rows > 0){
-            $errores[] = "El usuario ya existe";
+            $errores[] = "el usuario ya existe";
         }
         
         if (empty($errores)){
-            $query = "INSERT INTO usuario (cedula, nombre, apellido, correo, contraseña, telefono) VALUES ('$cedula', '$nombre', '$apellido', '$correo', '$contraseña_hash', '$telefono')";
+            $query = "INSERT INTO usuario (cedula, nombre, apellido, correo, contraseña, telefono) VALUES ('".
+            $cedula. "', '" .$nombre. "', '" .$apellido. "', '" .$correo. "', '" .$contraseña. "', '" .$telefono. "');";
             $insertar = mysqli_query($conex, $query);
 
             if($insertar){
-                header("Location: ../pag/index.php");
+                // Redirige al index.php de la raíz
+                header("Location: ../index.php");
                 exit;
             }
         }
@@ -58,30 +60,32 @@ function create_user(){
 }
 
 function login_user(){
-    require 'conexion.php';
+    require __DIR__ . '/conexion.php';
     $errores = [];
 
     if (isset($_POST['ingresar'])){
-        $correo = $_POST['correo'] ?? '';
+        $correo = trim($_POST['correo'] ?? '');
         $contraseña = $_POST['contraseña'] ?? '';
 
-        if (!$correo) $errores[] = "El correo es obligatorio";
-        if (!$contraseña) $errores[] = "La contraseña es obligatoria";
+        if (!$correo) $errores[] = "Ingrese el correo";
+        if (!$contraseña) $errores[] = "Ingrese la contraseña";
 
         if (empty($errores)){
             $query = "SELECT * FROM usuario WHERE correo = '$correo'";
             $resultado = mysqli_query($conex, $query);
 
-            if ($resultado && $resultado->num_rows > 0){
+            if ($resultado && mysqli_num_rows($resultado) > 0){
                 $usuario = mysqli_fetch_assoc($resultado);
                 
-                // Verificar la contraseña encriptada
-                if (password_verify($contraseña, $usuario['contraseña'])){
-                    session_start();
+                if (password_verify($contraseña, $usuario['contraseña']) || $contraseña === $usuario['contraseña']){
+                    if (session_status() === PHP_SESSION_NONE) {
+                        session_start();
+                    }
                     $_SESSION['usuario'] = $usuario['nombre'] . ' ' . $usuario['apellido'];
                     $_SESSION['login'] = true;
 
-                    header("Location: users.php");
+                    // Redirige de la raíz a pag/users.php
+                    header("Location: pag/users.php");
                     exit;
                 } else {
                     $errores[] = "Contraseña incorrecta";

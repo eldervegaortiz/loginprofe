@@ -1,48 +1,54 @@
 <?php
 require_once '../db/funciones.php';
-$errores = create_user();
+$adduser = create_user();
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Usuarios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
 </head>
 <body>
-    <h2>Registro de Usuario</h2>
-
-    <?php if (!empty($errores)): ?>
-        <?php foreach ($errores as $error): ?>
-            <p style="color: red;"><?php echo $error; ?></p>
-        <?php endforeach; ?>
-    <?php endif; ?>
 
     <form action="formUsuarios.php" method="POST" autocomplete="off">
-        <label>Nombre:</label>
-        <input type="text" name="nombre" required><br>
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre" required><br>
         
-        <label>Apellido:</label>
-        <input type="text" name="apellido" required><br>
+        <label for="apellido">Apellido:</label>
+        <input type="text" name="apellido" id="apellido" required><br>
         
-        <label>Cédula:</label>
-        <input type="text" name="cedula" required><br>
+        <label for="cedula">Cédula:</label>
+        <input type="text" name="cedula" id="cedula" required><br>
          
-        <label>Correo:</label>
-        <input type="email" name="correo" required><br>
-        
-        <label>Teléfono:</label>
-        <input type="text" name="telefono" required><br>
+        <label for="correo">Correo:</label>
+        <input type="text" name="correo" id="correo" required><br>
          
-        <label>Contraseña:</label> 
-        <input type="password" name="contraseña" required><br>
+        <label for="telefono">Teléfono:</label>
+        <input type="text" name="telefono" id="telefono" required><br>
+         
+        <label for="contraseña">Contraseña:</label> 
+        <input type="password" name="contraseña" id="contraseña" required><br>
         
-        <label>Conf. Contraseña:</label>
-        <input type="password" name="confcontraseña" required><br><br>
+        <label for="confcontraseña">Conf. Contraseña:</label>
+        <input type="password" name="confcontraseña" id="confcontraseña" required><br><br>
         
-        <input type="submit" name="agregar" value="Registrar" style="background-color: #28a745; color: white;">
+        <input type="submit" name="agregar" value="agregar" style="background-color: #28a745; color: white;">
     </form>
+
     <br>
-    <a href="../pag/index.php">Ir al Login</a>
+
+    <?php
+    if (!empty($adduser) && is_array($adduser)) {
+        foreach ($adduser as $error){
+            echo "<p style='color: red;'>" . $error . "</p>";
+        }
+    }
+    ?>
+
+    <br>
+    <a href="../index.php">Ir al Login</a>
+
 </body>
 </html>
