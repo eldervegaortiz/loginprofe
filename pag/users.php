@@ -6,7 +6,9 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
     exit;
 }
 
-require_once '../db/funciones.php';
+// Ruta actualizada hacia el archivo create.php
+require_once '../includes/users/create.php';
+
 $usuarios = obtener_usuarios();
 ?>
 
@@ -62,4 +64,4 @@ $usuarios = obtener_usuarios();
     <a href="cerrarSesion.php">Cerrar sesion</a>
 
 </body>
-</html>includes/users/update.php
+</html>
