@@ -1,5 +1,5 @@
 <?php
-require_once 'db/funciones.php';
+require_once __DIR__ . '/db/funciones.php';
 $errores = login_user();
 ?>
 
@@ -16,9 +16,9 @@ $errores = login_user();
 
     <?php if (!empty($errores)): ?>
         <div style="color: red; margin-bottom: 10px;">
-            <?php foreach ($errores as $error): ?>
+            <?php foreach ($errores as $error) { ?>
                 <p><?php echo $error; ?></p>
-            <?php endforeach; ?>
+            <?php } ?>
         </div>
     <?php endif; ?>
 
@@ -33,7 +33,7 @@ $errores = login_user();
     </form>
 
     <br>
-    <a href="form/formUsuarios.php">Regístrate aquí primer ves</a>
+    <a href="form/formUsuarios.php">Regístrate aquí por primera vez</a>
 
 </body>
 </html>
