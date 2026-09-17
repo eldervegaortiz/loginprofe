@@ -28,7 +28,7 @@ function login_user(){
                     $_SESSION['login'] = true;
 
                     // Redirige al panel de usuarios
-                    header("Location: pag/users.php");
+                    header("Location: users.php");
                     exit;
                 } else {
                     $errores[] = "Contraseña incorrecta";
