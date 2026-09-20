@@ -17,16 +17,16 @@ $errores = login_user();
     <?php if (!empty($errores)): ?>
         <div style="color: red; margin-bottom: 10px;">
             <?php foreach ($errores as $error) { ?>
-                <p><?php echo $error; ?></p>
+                <p><?php echo htmlspecialchars($error); ?></p>
             <?php } ?>
         </div>
     <?php endif; ?>
 
     <form action="index.php" method="POST" autocomplete="off">
-        <label for="correo">Correo:</label>
-        <input type="text" name="correo" id="correo" required><br><br>
+        <label for="correo">Correo:</label><br>
+        <input type="email" name="correo" id="correo" required><br><br>
 
-        <label for="contraseña">Contraseña:</label>
+        <label for="contraseña">Contraseña:</label><br>
         <input type="password" name="contraseña" id="contraseña" required><br><br>
 
         <input type="submit" name="ingresar" value="Ingresar">

@@ -1,15 +1,15 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
-    header("Location: ../index.php");
+if (!isset($_SESSION['login'])) {
+    header("Location: login.php");
     exit;
 }
 
-// Ruta actualizada hacia el archivo create.php
-require_once '../includes/users/create.php';
+require_once __DIR__ . '/../db/conexion.php';
+/** @var mysqli $conex */
 
-$usuarios = obtener_usuarios();
+$query = "SELECT * FROM usuario";
+$usuarios = mysqli_query($conex, $query);
 ?>
 
 <!DOCTYPE html>
@@ -38,25 +38,25 @@ $usuarios = obtener_usuarios();
             </tr>
         </thead>
         <tbody>
-            <?php
-            if ($usuarios) {
-                while ($user = $usuarios->fetch_assoc()) {
-            ?>
+            <?php if ($usuarios && mysqli_num_rows($usuarios) > 0): ?>
+                <?php while ($row = mysqli_fetch_assoc($usuarios)): ?>
                 <tr>
-                    <td><?php echo $user['cedula']; ?></td>
-                    <td><?php echo $user['nombre']; ?></td>
-                    <td><?php echo $user['apellido']; ?></td>
-                    <td><?php echo $user['correo']; ?></td>
-                    <td><?php echo $user['telefono']; ?></td>
+                    <td><?php echo htmlspecialchars($row['cedula'] ?? ''); ?></td>
+                    <td><?php echo htmlspecialchars($row['nombre'] ?? ''); ?></td>
+                    <td><?php echo htmlspecialchars($row['apellido'] ?? ''); ?></td>
+                    <td><?php echo htmlspecialchars($row['correo'] ?? ''); ?></td>
+                    <td><?php echo htmlspecialchars($row['telefono'] ?? ''); ?></td>
                     <td>
-                        <a href="../includes/users/update.php?id=<?php echo $user['id']; ?>">Actualizar</a>
-                        <a href="../includes/users/delete.php?id=<?php echo $user['id']; ?>" onclick="return confirm('¿Desea eliminar este usuario?')">Eliminar</a>
+                        <a href="../includes/users/update.php?id=<?php echo $row['id']; ?>">Actualizar</a>
+                        <a href="../includes/users/delete.php?id=<?php echo $row['id']; ?>">Eliminar</a>
                     </td>
                 </tr>
-            <?php
-                }
-            }
-            ?>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6">No hay usuarios registrados.</td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
 
