@@ -1,10 +1,8 @@
 <?php
 require_once __DIR__ . '/../../db/conexion.php';
-/** @var mysqli $conex */
 
 $errores = [];
 
-// Validar ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: ../../pag/users.php");
     exit;
@@ -12,7 +10,6 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id = (int)$_GET['id'];
 
-// Obtener los datos del usuario
 $query_select = "SELECT * FROM usuario WHERE id = $id";
 $resultado_select = mysqli_query($conex, $query_select);
 
@@ -23,7 +20,6 @@ if (!$resultado_select || mysqli_num_rows($resultado_select) === 0) {
 
 $usuario = mysqli_fetch_assoc($resultado_select);
 
-// Procesar actualización al presionar "Guardar cambios"
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar'])) {
     $cedula   = trim($_POST['cedula'] ?? '');
     $nombre   = trim($_POST['nombre'] ?? '');

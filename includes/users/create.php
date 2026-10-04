@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../../db/conexion.php';
-/** @var mysqli $conex */
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
     $cedula     = trim($_POST['cedula'] ?? '');

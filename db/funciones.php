@@ -1,32 +1,35 @@
 <?php
 
-function login_user(){
-    require __DIR__ . '/conexion.php';
-    /** @var mysqli $conex */
+function login_user() {
+    require_once __DIR__ . '/conexion.php';
 
     $errores = [];
 
-    if (isset($_POST['ingresar'])){
+    if (isset($_POST['ingresar'])) {
         $correo = trim($_POST['correo'] ?? '');
         $contraseña = $_POST['contraseña'] ?? '';
 
-        if (!$correo) $errores[] = "Ingrese el correo";
-        if (!$contraseña) $errores[] = "Ingrese la contraseña";
+        if (!$correo) {
+            $errores[] = "Ingrese el correo";
+        }
+        if (!$contraseña) {
+            $errores[] = "Ingrese la contraseña";
+        }
 
-        if (empty($errores)){
-            $query = "SELECT * FROM usuario WHERE correo = '$correo'";
-            $resultado = mysqli_query($conex, $query);
+        if (empty($errores)) {
+            $stmt = mysqli_prepare($conex, "SELECT * FROM usuario WHERE correo = ?");
+            mysqli_stmt_bind_param($stmt, "s", $correo);
+            mysqli_stmt_execute($stmt);
+            $resultado = mysqli_stmt_get_result($stmt);
 
-            if ($resultado && mysqli_num_rows($resultado) > 0){
+            if ($resultado && mysqli_num_rows($resultado) > 0) {
                 $usuario = mysqli_fetch_assoc($resultado);
-                
-                if (password_verify($contraseña, $usuario['contraseña']) || $contraseña === $usuario['contraseña']){
+                if (password_verify($contraseña, $usuario['contraseña']) || $contraseña === $usuario['contraseña']) {
                     if (session_status() === PHP_SESSION_NONE) {
                         session_start();
                     }
                     $_SESSION['usuario'] = $usuario['nombre'] . ' ' . $usuario['apellido'];
                     $_SESSION['login'] = true;
-
                     header("Location: pag/users.php");
                     exit;
                 } else {

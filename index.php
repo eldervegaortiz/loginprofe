@@ -8,32 +8,37 @@ $errores = login_user();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
+    <title>Sistema de barcos</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Krub:wght@400;700&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="db/scss/build/css/app.css">
 </head>
-<body>
+<body class="body-login">
 
-    <h2>Iniciar Sesión</h2>
+    <main class="contenedor-login">
+        <h2>Login</h2>
 
-    <?php if (!empty($errores)): ?>
-        <div style="color: red; margin-bottom: 10px;">
-            <?php foreach ($errores as $error) { ?>
-                <p><?php echo htmlspecialchars($error); ?></p>
-            <?php } ?>
-        </div>
-    <?php endif; ?>
+        <?php if (!empty($errores)): ?>
+            <div class="errores">
+                <?php foreach ($errores as $error): ?>
+                    <p><?php echo htmlspecialchars($error); ?></p>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
-    <form action="index.php" method="POST" autocomplete="off">
-        <label for="correo">Correo:</label><br>
-        <input type="email" name="correo" id="correo" required><br><br>
+        <form action="index.php" method="POST" autocomplete="off">
+            <label for="correo">Documento de usuario</label>
+            <input type="text" name="correo" id="correo" required>
 
-        <label for="contraseña">Contraseña:</label><br>
-        <input type="password" name="contraseña" id="contraseña" required><br><br>
+            <label for="contraseña">Contraseña</label>
+            <input type="password" name="contraseña" id="contraseña" required>
 
-        <input type="submit" name="ingresar" value="Ingresar">
-    </form>
-
-    <br>
-    <a href="form/formUsuarios.php">Regístrate aquí por primera vez</a>
+            <input type="submit" name="ingresar" value="Enviar">
+        </form>
+    </main>
 
 </body>
 </html>
