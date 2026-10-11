@@ -8,13 +8,14 @@ $errores = login_user();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de barcos</title>
+    <title>Sistema de barcos - Login</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Krub:wght@400;700&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Krub:wght@400;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="db/scss/build/css/app.css">
+    
+    <link rel="stylesheet" href="/loginprofe1termil/db/scss/build/css/app.css">
 </head>
 <body class="body-login">
 
